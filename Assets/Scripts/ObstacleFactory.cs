@@ -22,30 +22,20 @@ public class ObstacleFactory : MonoBehaviour
         Vector2 objSpawn = mainCam.ViewportToWorldPoint(startPos); //convert viewport 1,1 to world space (mobile responsive)
         Vector2 objectDeSpawn = mainCam.ViewportToWorldPoint(endPos); //convert viewport 1,1 to world space (mobile responsive)
 
-        GameObject obstacle = Instantiate(obstacles[0], objSpawn, Quaternion.identity);
+        GameObject obstacle = Instantiate(obstacles[0], objSpawn, Quaternion.identity); // create object
 
-
-
-        Vector3 screenPos = mainCam.WorldToViewportPoint(obstacle.transform.position);
-
-        Debug.Log("Obstacle worldPos: " + obstacle.transform.position);
-        Debug.Log("Obstacle screenPos: " + screenPos); 
-
-        StartCoroutine(NewPos(obstacle, objectDeSpawn));
+        StartCoroutine(MoveObject(obstacle, objectDeSpawn));
     }
 
-    IEnumerator NewPos(GameObject obstacle, Vector2 dest)
+    IEnumerator MoveObject(GameObject obstacle, Vector2 dest)
     {
-        Debug.Log("Moving object...");
         
         var t = 0f;
         var origPos = obstacle.transform.position;
 
-
         while(t<1)
         {
             obstacle.transform.position = new Vector2 (Mathf.Lerp(origPos.x, dest.x, t), 0);
-            Debug.Log("Obstacle worldPos: " + obstacle.transform.position);
             t+= .02f; // lower = slower
             yield return new WaitForSeconds(.05f); // lower = faster
 
