@@ -17,12 +17,24 @@ public class PlayerController : MonoBehaviour
         set;
     }
     
-    public Vector2 OriginalVelocity{get;set;}
+    public Vector2 OriginalVelocity
+    {
+        get;
+        set;
+    }
+
     void Awake()
     {
         rb2D = GetComponent<Rigidbody2D>();
         JumpVelocity = new Vector2 (0, jumpForce);
-        
+    }
+
+    void FixedUpdate()
+    {
+        if(rb2D.velocity == OriginalVelocity)
+        {
+            isJumping = false;
+        }
     }
 
     void Update()
@@ -31,17 +43,18 @@ public class PlayerController : MonoBehaviour
         {
             Jump();
         }
-
-        if(rb2D.velocity == OriginalVelocity)
-        {
-            isJumping = false;
-        }
     }
 
     private void Jump()
     {
         if(Input.touchCount > 0)
         {   
+            isJumping = true;
+            OriginalVelocity = rb2D.velocity;
+            Debug.Log("jump");
+            rb2D.velocity = JumpVelocity;
+        }else if(Input.GetKeyDown(KeyCode.Space))
+        {
             isJumping = true;
             OriginalVelocity = rb2D.velocity;
             Debug.Log("jump");
